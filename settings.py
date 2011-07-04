@@ -1,7 +1,7 @@
 import os.path
 # Django settings for riagi project.
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 TIME_ZONE = 'Europe/London'

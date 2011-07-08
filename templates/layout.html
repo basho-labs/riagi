@@ -1,0 +1,26 @@
+{% load static %}
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link href="{% get_static_prefix %}css/screen.css" rel="stylesheet" type="text/css" media="screen,projection" />
+    </head>
+    <body>
+
+    <div class="container">
+        <div class="span-24">
+            The header
+        </div>
+
+        <div class="span-24">
+            {% block content %}
+            {% endblock %}
+        </div>
+        
+        <div class="span-24">
+            The footer
+        </div>
+      </div>
+
+  </body>
+</html>

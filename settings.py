@@ -1,11 +1,10 @@
 import os.path
 # Django settings for riagi project.
 
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-TIME_ZONE = 'Europe/London'
-
+TIME_ZONE = 'Europe/London' 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'en-us'
@@ -15,13 +14,13 @@ SITE_ID = 1
 USE_I18N = False
 USE_L10N = False
 
-MEDIA_ROOT = ''
 MEDIA_URL = ''
-STATIC_ROOT = ''
 STATIC_URL = '/assets/'
+STATIC_ROOT = ''
+MEDIA_ROOT = ''
 
 STATICFILES_DIRS = (
-    os.path.join(os.path.dirname(__file__), "assets")
+    os.path.join(os.path.dirname(__file__), "assets"),
 )
 
 STATICFILES_FINDERS = (

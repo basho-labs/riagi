@@ -1,5 +1,11 @@
 {% extends "layout.html" %}
 
 {% block content %}
-{{ signup_form.as_table }}
+<form method="post" action="/users/signup">
+    {% csrf_token %}
+    <fieldset>
+        {{ signup_form.as_p }}
+        <input type="submit"/>
+    </fieldset>
+</form>
 {% endblock %}

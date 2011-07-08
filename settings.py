@@ -15,12 +15,12 @@ USE_I18N = False
 USE_L10N = False
 
 MEDIA_URL = ''
-STATIC_URL = '/assets/'
+STATIC_URL = '/static/'
 STATIC_ROOT = ''
 MEDIA_ROOT = ''
 
 STATICFILES_DIRS = (
-    os.path.join(os.path.dirname(__file__), "assets"),
+    os.path.join(os.path.dirname(__file__), "static"),
 )
 
 STATICFILES_FINDERS = (

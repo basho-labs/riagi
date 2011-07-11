@@ -1,8 +1,16 @@
 import os.path
+import django_riak
 # Django settings for riagi project.
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
+
+RIAK_HOST = "127.0.0.1"
+RIAK_PORT = "8098"
+RIAK_PROTOCOL = "http"
+RIAK_USERS_BUCKET = "riagi-users"
+
+SESSION_ENGINE="django_riak"
 
 TIME_ZONE = 'Europe/London' 
 # Language code for this installation. All choices can be found here:

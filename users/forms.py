@@ -1,4 +1,5 @@
 from django import forms
+from users.service import UsersRiakService
 from django.forms.util import ErrorList
 
 class DivErrorList(ErrorList):
@@ -10,8 +11,13 @@ class DivErrorList(ErrorList):
 
 class SignupForm(forms.Form):
     email = forms.EmailField(widget=forms.TextInput(attrs={'class':'text'}))
-    username = forms.CharField(max_length=20,widget=forms.TextInput(attrs={'class':'text'}))
+    username = forms.RegexField(regex=r'^\w+$', max_length=20, widget=forms.TextInput(attrs={'class':'text'}))
     password = forms.CharField(widget=forms.PasswordInput(render_value=False, attrs={'class':'text'}))
+
+    def save(self):
+        user_data = self.cleaned_data
+        user_service = UsersRiakService()
+        user_service.save(user_data)
 
 class LoginForm(forms.Form):
     pass

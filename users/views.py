@@ -14,7 +14,7 @@ def signup(request):
             request.session['username'] = signup_form.save()
             return HttpResponseRedirect("/")
     else:
-        signup_form = SignupForm() 
+        signup_form = SignupForm(label_suffix="<br/>") 
     
     return render_to_response('users/signup.html', {'signup_form': signup_form},
             context_instance=RequestContext(request))

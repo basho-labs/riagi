@@ -14,9 +14,13 @@ class UsersRiakService:
         return user_data["username"]
 
     def get(self, username):
-        query = "username:'%s'" % username
-        user = self.riak.search(settings.RIAK_USERS_BUCKET, query)
-        return user
+        query = "username:%s" % username
+        user = self.riak.search(settings.RIAK_USERS_BUCKET, query).run()
+        if user:
+            user = user[0]
+            user.set_bucket(str(user.get_bucket()))
+            user.set_key(str(user.get_key()))
+            return user.get().get_data()
 
     def generate_key(self):
         return uuid.uuid1().hex

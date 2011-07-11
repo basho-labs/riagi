@@ -5,6 +5,7 @@ from django.conf.urls.defaults import patterns, include, url
 # admin.autodiscover()
 
 urlpatterns = patterns('',
+    url(r'^$', 'riagi.views.home'),
     url(r'^images/', include('images.urls')),
     url(r'^users/', include('users.urls'))
     # Examples:

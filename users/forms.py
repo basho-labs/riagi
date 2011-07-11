@@ -18,6 +18,7 @@ class SignupForm(forms.Form):
         user_data = self.cleaned_data
         user_service = UsersRiakService()
         user_service.save(user_data)
+        return self.cleaned_data['username']
 
 class LoginForm(forms.Form):
     pass

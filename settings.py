@@ -12,8 +12,8 @@ RIAK_USERS_BUCKET = "riagi-users"
 RIAK_IMAGE_BUCKET = "riagi-images"
 RIAK_METADATA_BUCKET = "riagi-image-metadata"
 
-SESSION_ENGINE="django_riak"
-
+SESSION_ENGINE = "django_riak"
+APPEND_SLASH = False
 TIME_ZONE = 'Europe/London' 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html

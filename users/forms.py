@@ -1,5 +1,5 @@
 from django import forms
-from users.service import UsersRiakService
+from users.service import UserService
 from django.forms.util import ErrorList
 
 class DivErrorList(ErrorList):
@@ -16,7 +16,7 @@ class SignupForm(forms.Form):
 
     def save(self):
         user_data = self.cleaned_data
-        user_service = UsersRiakService()
+        user_service = UserService()
         return user_service.save(user_data)
 
 class LoginForm(forms.Form):

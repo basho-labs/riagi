@@ -2,13 +2,13 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.template import RequestContext
 
-from users.service import UsersRiakService
+from users.service import UserService
 from images.forms import UploadForm
 
 def home(request):
     user = None
     if 'user_id' in request.session:
-        user_service = UsersRiakService()
+        user_service = UserService()
         user = user_service.get(request.session['user_id'])
     
     upload_form = UploadForm(label_suffix="<br/>")

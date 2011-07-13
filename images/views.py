@@ -1,5 +1,6 @@
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response, redirect
+from django.template import RequestContext
 
 from images.forms import UploadForm
 from images.services import ImageService
@@ -16,7 +17,8 @@ def show(request, image_id):
     image_service = ImageService()
     image = image_service.find_metadata(str(image_id))
     if image:
-        return render_to_response('images/show.html', {'image': image})
+        return render_to_response('images/show.html', {'image': image},
+            context_instance=RequestContext(request))
     else:
         raise Http404
 
@@ -35,4 +37,5 @@ def mine(request):
     user = request.session['user_id']
     image_service = ImageService()
     images = image_service.find_all(user)
-    return render_to_response("images/mine.html", {'images': images})
+    return render_to_response("images/mine.html", {'images': images},
+            context_instance=RequestContext(request))

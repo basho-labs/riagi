@@ -28,7 +28,7 @@ def logout(request):
 def login(request):
     if request.method == "POST":
         form = LoginForm(request.POST)
-        if form.is_valid():
+        if form.is_valid() and form.logged_in():
             request.session['user_id'] = form.cleaned_data['user_id']
             return redirect('/')
         else:

@@ -1,6 +1,9 @@
+import re
+
 from django import forms
-from users.service import UserService
 from django.forms.util import ErrorList
+
+from users.service import UserService
 
 class DivErrorList(ErrorList):
      def __unicode__(self):
@@ -23,7 +26,7 @@ class LoginForm(forms.Form):
     username = forms.RegexField(regex=r'^\w+$', max_length=20, widget=forms.TextInput(attrs={'class':'text'}))
     password = forms.CharField(widget=forms.PasswordInput(render_value=False, attrs={'class':'text'}))
 
-    def clean(self):
+    def logged_in(self):
         user_service = UserService()
         user = user_service.login(self.cleaned_data['username'], self.cleaned_data['password'])
         if user:

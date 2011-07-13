@@ -20,4 +20,14 @@ class SignupForm(forms.Form):
         return user_service.save(user_data)
 
 class LoginForm(forms.Form):
-    pass
+    username = forms.RegexField(regex=r'^\w+$', max_length=20, widget=forms.TextInput(attrs={'class':'text'}))
+    password = forms.CharField(widget=forms.PasswordInput(render_value=False, attrs={'class':'text'}))
+
+    def clean(self):
+        user_service = UserService()
+        user = user_service.login(self.cleaned_data['username'], self.cleaned_data['password'])
+        if user:
+            self.cleaned_data['user_id'] = user.get_key()
+            return self.cleaned_data
+        else:
+            raise forms.ValidationError(u'Invalid username or password')

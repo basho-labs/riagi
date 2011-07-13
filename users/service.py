@@ -87,5 +87,19 @@ class UserService:
         else:
             return None
 
+    def login(self, username, password):
+        user = self.riak.search(settings.RIAK_USERS_BUCKET, "username:%s" % username).run()
+        if user:
+            user = user[0]
+            user.set_bucket(str(user.get_bucket()))
+            user.set_key(str(user.get_key()))
+            user_data = user.get().get_data()
+            if check_password(password, user_data['encrypted_password']):
+                return user
+            else:
+                return False
+        else:
+            return False
+
     def generate_key(self):
         return uuid.uuid1().hex

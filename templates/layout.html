@@ -4,12 +4,25 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <link href="{% get_static_prefix %}css/screen.css" rel="stylesheet" type="text/css" media="screen,projection" />
+        <script src="{% get_static_prefix %}ender.js" type="text/javascript" charset="utf-8"></script>
     </head>
     <body>
 
     <div class="container">
-        <div class="span-16">
+        <div class="span-12">
             The header
+        </div>
+        <div class="span-4">
+            {% if request.session.user_id %}
+            <form action="/users/logout" method="post" id="signout-form">
+                {% csrf_token %}
+                <input type="hidden" name="logout"/>
+                <a href="#" id="signout">Log out</a>
+            </form>
+            {% else %}
+            <a href="/users/signup">Sign up</a>
+            <a href="/users/login">Login</a>
+            {% endif %}
         </div>
 
         <div class="span-16">
@@ -20,7 +33,16 @@
         <div class="span-16">
             The footer
         </div>
-      </div>
-
+    </div>
+    <script type="text/javascript" charset="utf-8">
+        $.domReady(function() {
+            $('#signout').bind('click', function(e) {
+                e.preventDefault();
+                $('#signout-form').each(function(e) {
+                    this.submit();
+                });
+            });
+        });
+    </script>
   </body>
 </html>

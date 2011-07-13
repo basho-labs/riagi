@@ -1,5 +1,10 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response
+from images.forms import UploadForm
 
-def index(request):
-    return render_to_response('images/index.html', {"name": request.GET.get("name")})
+def upload(request):
+    if request.method == "POST":
+       upload = UploadForm(request.POST, request.FILES)
+       upload.save(request)
+
+    return HttpResponseRedirect("/")

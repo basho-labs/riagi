@@ -1,5 +1,17 @@
 {% extends "layout.html" %}
 
 {% block content %}
-Hello {{ user.username }}!
+{% if user %}
+<p>
+  Hello {{ user.username }}, why not upload an image?
+</p>
+<p>
+  <form method="post" action="/images/upload" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ upload_form.as_p }}
+      <input type="submit" value="upload"/>
+  </form>
+</p>
+{% endif %}
 {% endblock %}
+

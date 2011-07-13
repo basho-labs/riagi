@@ -9,6 +9,8 @@ RIAK_HOST = "127.0.0.1"
 RIAK_PORT = "8098"
 RIAK_PROTOCOL = "http"
 RIAK_USERS_BUCKET = "riagi-users"
+RIAK_IMAGE_BUCKET = "riagi-images"
+RIAK_META_DATA_BUCKET = "riagi-image-metadata"
 
 SESSION_ENGINE="django_riak"
 

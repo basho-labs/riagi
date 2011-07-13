@@ -25,8 +25,14 @@ def fetch(request, image_id):
     image = image_service.find(str(image_id))
     if image:
         return HttpResponse(content=image.get_data(), mimetype=image.get_content_type())
-
     else:
         raise Http404
 
+def mine(request):
+    if not 'username' in request.session:
+        return redirect("/")
 
+    user = request.session['username']
+    image_service = ImageService()
+    images = image_service.find_all(user)
+    return render_to_response("images/mine.html", {'images': images})

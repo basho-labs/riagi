@@ -7,4 +7,5 @@ class UploadForm(forms.Form):
     def save(self, request):
         file = request.FILES['image']
         image_service = ImageService()
-        image_service.store(file.read(), request.session['username'], file.content_type)
+        username = request.session['username']
+        return image_service.store(file.read(), username, file.content_type)

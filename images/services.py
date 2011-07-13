@@ -13,7 +13,7 @@ class ImageService:
         self._metadata_bucket = None
 
     def store(self, file, user, content_type):
-        key = self.create_unique_key(5)
+        key = self.create_unique_key()
         filename = self.filename_for_image(key, content_type)
         data = {"user": user,
                 "uploaded_at": datetime.utcnow().isoformat(),
@@ -26,11 +26,24 @@ class ImageService:
         image.store()
         return key
 
+    def find_metadata(self, image_id):
+        image = self.metadata_bucket().get(image_id)
+        if image.exists():
+            return image.get_data()
+        else:
+            return None
+
+    def find(self, image_id):
+        image = self.image_bucket().get_binary(image_id)
+        if image.exists():
+            return image
+        else:
+            return None
+
     def create_unique_key(self, length=6):
         unique = False
         while not unique:
             id = self.unique_key(length)
-            print("Trying id %s" % id)
             if not self.image_bucket().get(id).exists():
                 return id
 

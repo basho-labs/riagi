@@ -7,9 +7,9 @@ from images.forms import UploadForm
 
 def home(request):
     user = None
-    if 'username' in request.session:
+    if 'user_id' in request.session:
         user_service = UsersRiakService()
-        user = user_service.get(request.session['username'])
+        user = user_service.get(request.session['user_id'])
     
     upload_form = UploadForm(label_suffix="<br/>")
 

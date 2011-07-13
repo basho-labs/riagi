@@ -5,13 +5,13 @@ from django.template import RequestContext
 from users.forms import DivErrorList
 
 def signup(request):
-    if 'username' in request.session:
+    if 'user_id' in request.session:
         return HttpResponseRedirect("/")
 
     if request.method == "POST":
         signup_form = SignupForm(request.POST, label_suffix="<br/>", error_class=DivErrorList)
         if signup_form.is_valid():
-            request.session['username'] = signup_form.save()
+            request.session['user_id'] = signup_form.save()
             return HttpResponseRedirect("/")
     else:
         signup_form = SignupForm(label_suffix="<br/>") 

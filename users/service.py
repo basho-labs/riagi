@@ -11,16 +11,14 @@ class UsersRiakService:
         key = self.generate_key()
         user = self.riak.bucket(self.users_bucket).new(key, user_data)
         user.store()
-        return user_data["username"]
+        return key
 
-    def get(self, username):
-        query = "username:%s" % username
-        user = self.riak.search(settings.RIAK_USERS_BUCKET, query).run()
-        if user:
-            user = user[0]
-            user.set_bucket(str(user.get_bucket()))
-            user.set_key(str(user.get_key()))
-            return user.get().get_data()
+    def get(self, user_id):
+        user = self.riak.bucket(settings.RIAK_USERS_BUCKET).get(str(user_id))
+        if user.exists():
+            return user.get_data()
+        else:
+            return None
 
     def generate_key(self):
         return uuid.uuid1().hex

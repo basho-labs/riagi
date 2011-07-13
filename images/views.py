@@ -1,5 +1,5 @@
 from django.http import HttpResponse, HttpResponseRedirect, Http404
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, redirect
 
 from images.forms import UploadForm
 from images.services import ImageService
@@ -29,10 +29,10 @@ def fetch(request, image_id):
         raise Http404
 
 def mine(request):
-    if not 'username' in request.session:
+    if not 'user_id' in request.session:
         return redirect("/")
 
-    user = request.session['username']
+    user = request.session['user_id']
     image_service = ImageService()
     images = image_service.find_all(user)
     return render_to_response("images/mine.html", {'images': images})

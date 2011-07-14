@@ -1,7 +1,8 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, redirect
-from users.forms import SignupForm, LoginForm
 from django.template import RequestContext
+
+from users.forms import SignupForm, LoginForm
 from users.forms import DivErrorList
 
 def signup(request):
@@ -14,7 +15,7 @@ def signup(request):
             request.session['user_id'] = signup_form.save()
             return HttpResponseRedirect("/")
     else:
-        signup_form = SignupForm(label_suffix="<br/>") 
+        signup_form = SignupForm() 
     
     return render_to_response('users/signup.html', {'signup_form': signup_form},
             context_instance=RequestContext(request))
@@ -34,5 +35,5 @@ def login(request):
         else:
             return render_to_response('users/login.html', {'form': form}, context_instance=RequestContext(request))
     else:
-        form = LoginForm()
+        form = LoginForm(label_suffix="<br/>")
         return render_to_response('users/login.html', {'form': form}, context_instance=RequestContext(request))

@@ -6,15 +6,6 @@ from django.conf.urls.defaults import patterns, include, url
 
 urlpatterns = patterns('',
     url(r'^$', 'riagi.views.home'),
-    url(r'^images/', include('images.urls')),
+    url(r'^(images|i)/', include('images.urls')),
     url(r'^users/', include('users.urls'))
-    # Examples:
-    # url(r'^$', 'riagi.views.home', name='home'),
-    # url(r'^riagi/', include('riagi.foo.urls')),
-
-    # Uncomment the admin/doc line below to enable admin documentation:
-    # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-
-    # Uncomment the next line to enable the admin:
-    # url(r'^admin/', include(admin.site.urls)),
 )

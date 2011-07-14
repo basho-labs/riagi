@@ -11,8 +11,9 @@ class ImageService:
         self.riak = RiakClient(host=settings.RIAK_HOST, port=settings.RIAK_PORT)
         self._metadata_bucket = self.riak.bucket(settings.RIAK_METADATA_BUCKET)
         self._image_bucket = self.riak.bucket(settings.RIAK_IMAGE_BUCKET)
+        self._thumbs_bucket = self.riak.bucket(settings.RIAK_THUMBS_BUCKET)
 
-    def store(self, file, user, content_type):
+    def store(self, image, thumbnail, user, content_type):
         key = self.create_unique_key()
         filename = self.filename_for_image(key, content_type)
         data = {"user": user,
@@ -22,8 +23,12 @@ class ImageService:
         metadata = self._metadata_bucket.new(key, data, content_type="application/json")
         metadata.store()
 
-        image = self._image_bucket.new_binary(key, file, content_type)
+        image = self._image_bucket.new_binary(key, image, content_type)
         image.store()
+
+        thumb = self._thumbs_bucket.new_binary(key, thumbnail, content_type="image/jpeg")
+        thumb.store()
+
         return key
 
     def find_metadata(self, image_id):
@@ -33,8 +38,11 @@ class ImageService:
         else:
             return None
 
-    def find(self, image_id):
-        image = self._image_bucket.get_binary(image_id)
+    def find(self, image_id, thumb=False):
+        if thumb:
+            image = self._thumbs_bucket.get_binary(image_id)
+        else:
+            image = self._image_bucket.get_binary(image_id)
         if image.exists():
             return image
         else:

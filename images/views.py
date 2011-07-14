@@ -22,9 +22,9 @@ def show(request, image_id):
     else:
         raise Http404
 
-def fetch(request, image_id):
+def fetch(request, image_id, thumb=False):
     image_service = ImageService()
-    image = image_service.find(str(image_id))
+    image = image_service.find(str(image_id), thumb=thumb)
     if image:
         return HttpResponse(content=image.get_data(), mimetype=image.get_content_type())
     else:

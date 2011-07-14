@@ -10,7 +10,9 @@ RIAK_PORT = "8098"
 RIAK_PROTOCOL = "http"
 RIAK_USERS_BUCKET = "riagi-users"
 RIAK_IMAGE_BUCKET = "riagi-images"
+RIAK_THUMBS_BUCKET = "riagi-thumbs"
 RIAK_METADATA_BUCKET = "riagi-image-metadata"
+FILE_UPLOAD_MAX_MEMORY_SIZE = 0
 
 SESSION_ENGINE = "django_riak"
 APPEND_SLASH = False

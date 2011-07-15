@@ -5,8 +5,13 @@ import django_riak
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-RIAK_HOST = "127.0.0.1"
-RIAK_PORT = "8098"
+if os.environ["LOGNAME"] == "dotcloud":
+    RIAK_HOST = "riak01.riagi.com"
+    RIAK_PORT = "8098"
+else:
+    RIAK_HOST = "127.0.0.1"
+    RIAK_PORT = "8098"
+
 RIAK_PROTOCOL = "http"
 RIAK_USERS_BUCKET = "riagi-users"
 RIAK_IMAGE_BUCKET = "riagi-images"

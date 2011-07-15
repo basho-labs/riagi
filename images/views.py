@@ -3,7 +3,7 @@ from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
 
 from images.forms import UploadForm
-from images.services import ImageService
+from images.services import ImageService, ImageError
 
 def upload(request):
     if request.method == "POST":
@@ -12,13 +12,11 @@ def upload(request):
         return HttpResponseRedirect("/i/%s" % filename)
     elif "url" in request.GET:
         image_service = ImageService()
-        status, result = image_service.store_from_url(request.GET["url"], request.session["user_id"])
-        print(status)
-        print(result)
-        if status is "error":
-            return HttpResponse(result, status=400)
-        else:
-            return HttpResponseRedirect("/i/%s" % result)
+        try:
+            key = image_service.store_from_url(request.GET["url"], request.session["user_id"])
+            return HttpResponseRedirect("/i/%s" % key)
+        except ImageError as e:
+            return HttpResponse(e.msg, status=400)
     else:
         return HttpResponseRedirect("/")
 

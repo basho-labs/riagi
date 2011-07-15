@@ -12,6 +12,9 @@ from tempfile import NamedTemporaryFile
 from riak import RiakClient
 from django.conf import settings
 
+class ImageError(Exception):
+    pass
+
 class RemoteImage:
     def __init__(self, reader):
         self._temp_file = NamedTemporaryFile()
@@ -33,20 +36,18 @@ class ImageService:
         self._thumbs_bucket = self.riak.bucket(settings.RIAK_THUMBS_BUCKET)
 
     def store_from_url(self, address, user):
-        print address
         url = urlparse(address)
         if str(url.scheme) != 'http':
-            return ('error', u'Not a valid URL')
+            raise ImageError('Not a valid URL')
 
         if not re.search(r'(jpg|jpeg|png|gif)$', url.path):
-            return ('error', u'Unsupported file format')
+            raise ImageError('Unsupported file format')
 
         http = httplib.HTTPConnection(url.netloc)
         http.request('GET', url.path)
         response = http.getresponse()
         image = RemoteImage(response)
-        key = self.store(image, user, response.getheader("Content-Type", "image/jpg"))
-        return ('success', key)
+        return self.store(image, user, response.getheader("Content-Type", "image/jpg"))
 
     def store(self, image, user, content_type):
         key = self.create_unique_key()
@@ -55,22 +56,26 @@ class ImageService:
                 "uploaded_at": datetime.utcnow().isoformat(),
                 "filename": filename}
 
-        thumbnail = Image.open(image.temporary_file_path())
-        thumbnail.thumbnail((128, 128), Image.ANTIALIAS)
-        thumbio = StringIO()
-        thumbnail.save(thumbio, format="jpeg")
-        
+        thumbnail = self.create_thumbnail(image)
+       
         metadata = self._metadata_bucket.new(key, data, content_type="application/json")
         metadata.store()
 
         image = self._image_bucket.new_binary(key, image.read(), content_type)
         image.store()
 
-        thumb = self._thumbs_bucket.new_binary(key, thumbio.getvalue(),  content_type="image/jpeg")
+        thumb = self._thumbs_bucket.new_binary(key, thumbnail, content_type="image/jpeg")
         thumb.store()
 
         return key
 
+    def create_thumbnail(self, image):
+        thumbnail = Image.open(image.temporary_file_path())
+        thumbnail.thumbnail((128, 128), Image.ANTIALIAS)
+        thumbio = StringIO()
+        thumbnail.save(thumbio, format="jpeg")
+        return thumbio.getvalue()
+ 
     def find_metadata(self, image_id):
         image = self._metadata_bucket.get(image_id)
         if image.exists():

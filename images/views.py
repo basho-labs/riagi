@@ -9,7 +9,16 @@ def upload(request):
     if request.method == "POST":
         upload = UploadForm(request.POST, request.FILES)
         filename = upload.save(request)
-        return HttpResponseRedirect("/images/%s" % filename)
+        return HttpResponseRedirect("/i/%s" % filename)
+    elif "url" in request.GET:
+        image_service = ImageService()
+        status, result = image_service.store_from_url(request.GET["url"], request.session["user_id"])
+        print(status)
+        print(result)
+        if status is "error":
+            return HttpResponse(result, status=400)
+        else:
+            return HttpResponseRedirect("/i/%s" % result)
     else:
         return HttpResponseRedirect("/")
 

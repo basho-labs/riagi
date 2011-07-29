@@ -1,15 +1,23 @@
 from django.http import HttpResponse, HttpResponseRedirect, Http404
-from django.shortcuts import render_to_response, redirect
+from django.shortcuts import render_to_response, redirect, render
 from django.template import RequestContext
 
 from images.forms import UploadForm
 from images.services import ImageService, ImageError
+from users.service import UserService
 
 def upload(request):
     if request.method == "POST":
         upload = UploadForm(request.POST, request.FILES)
         filename = upload.save(request)
-        return HttpResponseRedirect("/i/%s" % filename)
+        if filename:
+            return HttpResponseRedirect("/i/%s" % filename)
+        else:
+            user = None
+            if 'user_id' in request.session:
+                user_service = UserService()
+                user = user_service.get(request.session['user_id'])
+            return render(request, 'home.html', {"user": user, "upload_form": upload}, context_instance=RequestContext(request))
     elif "url" in request.GET:
         image_service = ImageService()
         try:

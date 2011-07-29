@@ -88,7 +88,11 @@ class UserService:
             return None
 
     def login(self, username, password):
-        user = self.riak.search(settings.RIAK_USERS_BUCKET, "username:%s" % username).run()
+        try:
+            user = self.riak.search(settings.RIAK_USERS_BUCKET, "username:%s" % username).run()
+        except ValueError:
+            user = None
+
         if user:
             user = user[0]
             user.set_bucket(str(user.get_bucket()))

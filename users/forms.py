@@ -26,7 +26,7 @@ class LoginForm(forms.Form):
     username = forms.RegexField(regex=r'^\w+$', max_length=20, widget=forms.TextInput(attrs={'class':'text'}))
     password = forms.CharField(widget=forms.PasswordInput(render_value=False, attrs={'class':'text'}))
 
-    def logged_in(self):
+    def clean(self):
         user_service = UserService()
         user = user_service.login(self.cleaned_data['username'], self.cleaned_data['password'])
         if user:

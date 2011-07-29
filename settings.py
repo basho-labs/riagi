@@ -6,7 +6,7 @@ import django_riak
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-if os.environ["LOGNAME"] == "dotcloud":
+if pwd.getpwuid(os.getuid())[0] == "dotcloud":
     RIAK_HOST = "riak01.riagi.com"
     RIAK_PORT = "8098"
 else:

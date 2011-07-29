@@ -1,4 +1,5 @@
 import os.path
+import riak
 import django_riak
 # Django settings for riagi project.
 
@@ -19,6 +20,8 @@ RIAK_THUMBS_BUCKET = "riagi-thumbs"
 RIAK_METADATA_BUCKET = "riagi-image-metadata"
 FILE_UPLOAD_MAX_MEMORY_SIZE = 0
 
+RIAK_TRANSPORT_CLASS = riak.RiakHttpTransport
+RIAK_BUCKET = 'django-riak-sessions'
 SESSION_ENGINE = "django_riak"
 APPEND_SLASH = False
 TIME_ZONE = 'Europe/London' 

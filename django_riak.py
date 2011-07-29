@@ -5,11 +5,16 @@ from django.contrib.sessions.backends.base import SessionBase, CreateError
 
 import riak
 
+
 class SessionStore(SessionBase):
     
     def __init__(self, session_key=None):
-        self._client = riak.RiakClient()
-        self._bucket = self._client.bucket('sessions')
+        RIAK_PORT = getattr(settings, 'RIAK_PORT', 8087)
+        RIAK_HOST = getattr(settings, 'RIAK_HOST', "127.0.0.1")
+        RIAK_TRANSPORT_CLASS = getattr(settings, 'RIAK_TRANSPORT_CLASS', riak.RiakPbcTransport)
+        RIAK_BUCKET = getattr(settings, 'RIAK_BUCKET', 'django-riak-sessions')
+        self._client = riak.RiakClient(host=RIAK_HOST, port=RIAK_PORT, transport_class=RIAK_TRANSPORT_CLASS)
+        self._bucket = self._client.bucket(RIAK_BUCKET)
         super(SessionStore, self).__init__(session_key)
 
     def load(self):

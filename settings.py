@@ -1,6 +1,9 @@
 import os.path
 import riak
 import django_riak
+import pwd
+import os
+
 # Django settings for riagi project.
 
 DEBUG = True

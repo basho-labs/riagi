@@ -6,16 +6,16 @@ import os
 
 # Django settings for riagi project.
 
-DEBUG = True
-TEMPLATE_DEBUG = DEBUG
-
 if pwd.getpwuid(os.getuid())[0] == "dotcloud":
     RIAK_HOST = "riak01.riagi.com"
     RIAK_PORT = "8098"
+    DEBUG = False
 else:
     RIAK_HOST = "127.0.0.1"
     RIAK_PORT = "8098"
+    DEBUG = True
 
+TEMPLATE_DEBUG = DEBUG
 RIAK_PROTOCOL = "http"
 RIAK_USERS_BUCKET = "riagi-users"
 RIAK_IMAGE_BUCKET = "riagi-images"

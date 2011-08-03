@@ -3,6 +3,7 @@ import base64
 import uuid
 import httplib
 import re
+import shortuuid
 
 from urlparse import urlparse
 from datetime import datetime
@@ -109,7 +110,7 @@ class ImageService:
                 return id
 
     def unique_key(self, length=6):
-        return base64.b64encode(sha.new(uuid.uuid1().hex[0:7]).hexdigest()[0:7])[0:length]
+        return shortuuid.uuid()[0:length]
         
     def filename_for_image(self, key, content_type):
         if content_type in ['image/jpg', 'image/jpeg']:

@@ -27,7 +27,7 @@ RIAK_TRANSPORT_CLASS = riak.RiakHttpTransport
 RIAK_BUCKET = 'django-riak-sessions'
 SESSION_ENGINE = "django_riak"
 APPEND_SLASH = False
-TIME_ZONE = 'Europe/London' 
+TIME_ZONE = 'Europe/London'
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'en-us'

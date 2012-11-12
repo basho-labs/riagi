@@ -6,7 +6,9 @@ import hashlib
 from django.utils.encoding import smart_str
 from django.utils.crypto import constant_time_compare
 
-UNUSABLE_PASSWORD = '!' # This will never be a valid hash
+UNUSABLE_PASSWORD = '!'  # This will never be a valid hash
+ALLOWEDCHARS = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+
 
 def get_hexdigest(algorithm, salt, raw_password):
     """
@@ -18,7 +20,8 @@ def get_hexdigest(algorithm, salt, raw_password):
         try:
             import crypt
         except ImportError:
-            raise ValueError('"crypt" password algorithm not supported in this environment')
+            raise ValueError(
+                '"crypt" password algorithm not supported in this environment')
         return crypt.crypt(raw_password, salt)
 
     if algorithm == 'md5':
@@ -27,7 +30,8 @@ def get_hexdigest(algorithm, salt, raw_password):
         return hashlib.sha1(salt + raw_password).hexdigest()
     raise ValueError("Got unknown password algorithm type in password.")
 
-def get_random_string(length=12, allowed_chars='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'):
+
+def get_random_string(length=12, allowed_chars=ALLOWEDCHARS):
     """
     Returns a random string of length characters from the set of a-z, A-Z, 0-9
     for use as a salt.
@@ -42,6 +46,7 @@ def get_random_string(length=12, allowed_chars='abcdefghijklmnopqrstuvwxyzABCDEF
         pass
     return ''.join([random.choice(allowed_chars) for i in range(length)])
 
+
 def check_password(raw_password, enc_password):
     """
     Returns a boolean of whether the raw_password was correct. Handles
@@ -53,8 +58,11 @@ def check_password(raw_password, enc_password):
     algo, salt, hsh = parts
     return constant_time_compare(hsh, get_hexdigest(algo, salt, raw_password))
 
+
 def is_password_usable(encoded_password):
-    return encoded_password is not None and encoded_password != UNUSABLE_PASSWORD
+    return (encoded_password is not None
+            and encoded_password != UNUSABLE_PASSWORD)
+
 
 def make_password(algo, raw_password):
     """
@@ -66,10 +74,12 @@ def make_password(algo, raw_password):
     hsh = get_hexdigest(algo, salt, raw_password)
     return '%s$%s$%s' % (algo, salt, hsh)
 
+
 class UserService:
     def __init__(self):
         self.users_bucket = settings.RIAK_USERS_BUCKET
-        self.riak = RiakClient(host=settings.RIAK_HOST, port=settings.RIAK_PORT)
+        self.riak = RiakClient(host=settings.RIAK_HOST,
+                               port=settings.RIAK_PORT)
 
     def save(self, user_data):
         key = self.generate_key()
@@ -89,7 +99,8 @@ class UserService:
 
     def login(self, username, password):
         try:
-            user = self.riak.search(settings.RIAK_USERS_BUCKET, "username:%s" % username).run()
+            user = self.riak.search(settings.RIAK_USERS_BUCKET,
+                                    "username:%s" % username).run()
         except ValueError:
             user = None
 

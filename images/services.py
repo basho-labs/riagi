@@ -13,8 +13,16 @@ from tempfile import NamedTemporaryFile
 from riak import RiakClient
 from django.conf import settings
 
+MAP_DOCID = """function(value) {
+                 var doc = Riak.mapValuesJson(value)[0];
+                 doc['id'] = value.key;
+                 return [doc];
+               }"""
+
+
 class ImageError(Exception):
     pass
+
 
 class RemoteImage:
     def __init__(self, reader):
@@ -25,13 +33,15 @@ class RemoteImage:
 
     def temporary_file_path(self):
         return self._temp_file.name
-    
+
     def read(self):
         return self._temp_file.read()
 
+
 class ImageService:
     def __init__(self):
-        self.riak = RiakClient(host=settings.RIAK_HOST, port=settings.RIAK_PORT)
+        self.riak = RiakClient(host=settings.RIAK_HOST,
+                               port=settings.RIAK_PORT)
         self._metadata_bucket = self.riak.bucket(settings.RIAK_METADATA_BUCKET)
         self._image_bucket = self.riak.bucket(settings.RIAK_IMAGE_BUCKET)
         self._thumbs_bucket = self.riak.bucket(settings.RIAK_THUMBS_BUCKET)
@@ -48,7 +58,8 @@ class ImageService:
         http.request('GET', url.path)
         response = http.getresponse()
         image = RemoteImage(response)
-        return self.store(image, user, response.getheader("Content-Type", "image/jpg"))
+        return self.store(image, user,
+                          response.getheader("Content-Type", "image/jpg"))
 
     def store(self, image, user, content_type):
         key = self.create_unique_key()
@@ -58,14 +69,16 @@ class ImageService:
                 "filename": filename}
 
         thumbnail = self.create_thumbnail(image)
-       
-        metadata = self._metadata_bucket.new(key, data, content_type="application/json")
+
+        metadata = self._metadata_bucket.new(key, data,
+                                             content_type="application/json")
         metadata.store()
 
         image = self._image_bucket.new_binary(key, image.read(), content_type)
         image.store()
 
-        thumb = self._thumbs_bucket.new_binary(key, thumbnail, content_type="image/jpeg")
+        thumb = self._thumbs_bucket.new_binary(key, thumbnail,
+                                               content_type="image/jpeg")
         thumb.store()
 
         return key
@@ -76,7 +89,7 @@ class ImageService:
         thumbio = StringIO()
         thumbnail.save(thumbio, format="jpeg")
         return thumbio.getvalue()
- 
+
     def find_metadata(self, image_id):
         image = self._metadata_bucket.get(image_id)
         if image.exists():
@@ -95,11 +108,8 @@ class ImageService:
             return None
 
     def find_all(self, user):
-        images = self.riak.search(settings.RIAK_METADATA_BUCKET, "user:%s" % user).map("""function(value) {
-         var doc = Riak.mapValuesJson(value)[0];
-         doc['id'] = value.key;
-         return [doc];
-       }""").run()
+        images = self.riak.search(settings.RIAK_METADATA_BUCKET,
+                                  "user:%s" % user).map(MAP_DOCID).run()
         return images
 
     def create_unique_key(self, length=6):
@@ -111,7 +121,7 @@ class ImageService:
 
     def unique_key(self, length=6):
         return shortuuid.uuid()[0:length]
-        
+
     def filename_for_image(self, key, content_type):
         if content_type in ['image/jpg', 'image/jpeg']:
             extension = 'jpg'

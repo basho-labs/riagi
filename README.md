@@ -38,4 +38,5 @@ should see something like so:
 
 ## License
 
-riagi is licensed under the [Apache v2.0 license](/basho/riagi/blob/master/LICENSE).
+riagi is licensed under the
+[Apache v2.0 license](/basho/riagi/blob/master/LICENSE).

@@ -1,6 +1,7 @@
 from django import forms
 from images.services import ImageService
 
+
 class UploadForm(forms.Form):
     image = forms.ImageField()
 

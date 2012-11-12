@@ -6,6 +6,7 @@ from images.forms import UploadForm
 from images.services import ImageService, ImageError
 from users.service import UserService
 
+
 def upload(request):
     if request.method == "POST":
         upload = UploadForm(request.POST, request.FILES)
@@ -17,16 +18,20 @@ def upload(request):
             if 'user_id' in request.session:
                 user_service = UserService()
                 user = user_service.get(request.session['user_id'])
-            return render(request, 'home.html', {"user": user, "upload_form": upload}, context_instance=RequestContext(request))
+            return render(request, 'home.html',
+                          {"user": user, "upload_form": upload},
+                          context_instance=RequestContext(request))
     elif "url" in request.GET:
         image_service = ImageService()
         try:
-            key = image_service.store_from_url(request.GET["url"], request.session["user_id"])
+            key = image_service.store_from_url(request.GET["url"],
+                                               request.session["user_id"])
             return HttpResponseRedirect("/i/%s" % key)
         except ImageError as e:
             return HttpResponse(e.msg, status=400)
     else:
         return HttpResponseRedirect("/")
+
 
 def show(request, image_id):
     image_service = ImageService()
@@ -37,13 +42,16 @@ def show(request, image_id):
     else:
         raise Http404
 
+
 def fetch(request, image_id, thumb=False):
     image_service = ImageService()
     image = image_service.find(str(image_id), thumb=thumb)
     if image:
-        return HttpResponse(content=image.get_data(), mimetype=image.get_content_type())
+        return HttpResponse(content=image.get_data(),
+                            mimetype=image.get_content_type())
     else:
         raise Http404
+
 
 def mine(request):
     if not 'user_id' in request.session:

@@ -1,0 +1,7 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    {% for image in images %}
+    <a href="/i/{{ image.id }}"><img src="/i/t/{{ image.filename }}"/></a>
+    {% endfor %}
+{% endblock %}

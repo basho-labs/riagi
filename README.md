@@ -9,7 +9,7 @@ thumbnails, image metadata, user profiles, and sessions.
 The needed packages are listed in `requirements.txt`, but briefly,
 they are:
 
-* Django 1.3
+* Django 1.4.2
 * Python Imaging Library (PIL)
 * Riak Python Client (`riak`)
 * shortuuid

@@ -13,7 +13,7 @@ if pwd.getpwuid(os.getuid())[0] == "dotcloud":
     DEBUG = False
 else:
     RIAK_HOST = "127.0.0.1"
-    RIAK_PORT = "8091"
+    RIAK_PORT = "8087"
     DEBUG = True
 
 TEMPLATE_DEBUG = DEBUG

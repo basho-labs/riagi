@@ -9,7 +9,7 @@ import riak
 class SessionStore(SessionBase):
 
     def __init__(self, session_key=None):
-        RIAK_PORT = getattr(settings, 'RIAK_PORT', 8091)
+        RIAK_PORT = getattr(settings, 'RIAK_PORT', 8087)
         RIAK_HOST = getattr(settings, 'RIAK_HOST', "127.0.0.1")
         RIAK_TRANSPORT_CLASS = getattr(settings, 'RIAK_TRANSPORT_CLASS',
                                        riak.RiakPbcTransport)

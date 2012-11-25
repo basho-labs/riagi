@@ -2,9 +2,9 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response, redirect, render
 from django.template import RequestContext
 
-from images.forms import UploadForm
-from images.services import ImageService, ImageError
-from users.service import UserService
+from riagi.images.forms import UploadForm
+from riagi.images.services import ImageService, ImageError
+from riagi.users.service import UserService
 
 
 def upload(request):

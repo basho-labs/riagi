@@ -2,7 +2,7 @@ import re
 
 from django import forms
 from django.forms.util import ErrorList
-from users.service import UserService
+from riagi.users.service import UserService
 
 
 class DivErrorList(ErrorList):

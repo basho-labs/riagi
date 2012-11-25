@@ -2,8 +2,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
 
-from users.forms import SignupForm, LoginForm
-from users.forms import DivErrorList
+from riagi.users.forms import SignupForm, LoginForm
+from riagi.users.forms import DivErrorList
 
 
 def signup(request):

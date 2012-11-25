@@ -2,8 +2,8 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.template import RequestContext
 
-from users.service import UserService
-from images.forms import UploadForm
+from riagi.users.service import UserService
+from riagi.images.forms import UploadForm
 
 
 def home(request):

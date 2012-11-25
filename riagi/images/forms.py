@@ -1,5 +1,5 @@
 from django import forms
-from images.services import ImageService
+from riagi.images.services import ImageService
 
 
 class UploadForm(forms.Form):

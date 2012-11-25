@@ -108,8 +108,8 @@ class ImageService:
             return None
 
     def find_all(self, user):
-        images = self.riak.search(settings.RIAK_METADATA_BUCKET,
-                                  "user:%s" % user).map(MAP_DOCID).run()
+        images = self.riak.search(settings.RIAK_METADATA_BUCKET, 
+            "user:%s" % user).map(MAP_DOCID).run()
         return images
 
     def create_unique_key(self, length=6):

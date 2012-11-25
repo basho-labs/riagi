@@ -4,6 +4,7 @@ import django_riak
 import pwd
 import os
 
+
 # Django settings for riagi project.
 
 if pwd.getpwuid(os.getuid())[0] == "dotcloud":
@@ -12,7 +13,7 @@ if pwd.getpwuid(os.getuid())[0] == "dotcloud":
     DEBUG = False
 else:
     RIAK_HOST = "127.0.0.1"
-    RIAK_PORT = "8098"
+    RIAK_PORT = "8087"
     DEBUG = True
 
 TEMPLATE_DEBUG = DEBUG
@@ -65,7 +66,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
 )
 
-ROOT_URLCONF = 'urls'
+ROOT_URLCONF = 'riagi.urls'
 
 TEMPLATE_DIRS = (
     os.path.join(os.path.dirname(__file__), "templates")
@@ -78,8 +79,8 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'images',
-    'users'
+    'riagi.images',
+    'riagi.users'
     # Uncomment the next line to enable the admin:
     # 'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
